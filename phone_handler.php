@@ -13,20 +13,24 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 if ($data =="")  {
 	$errorNull= "No data received";
-	
-} else {	
+
+} else {
 
 // Convert json object to php associative array
 
 // Parse the contact details
-    $fname = $data['c_firstName'];
-    $lname = $data['c_lastName'];
-    $position = $data['c_Position'];
-	
+    $contactID = $data['p_contactID'];
+    $phoneNumber = $data['p_phoneNumber'];
+    $mobileFlag = $data['p_mobileFlag'];
+
+		if($mobileFlag == "") {
+			$mobileFlag = "No";
+		}
+
 // Validate fields by removing extra white spaces & escaping harmful characters
-$fname = trim($fname);
-$lname = trim($lname);
-$position = trim($position);
+$contactID = trim($contactID);
+$phoneNumber = trim($phoneNumber);
+$mobileFlag = trim($mobileFlag);
 
 // Create MySQL login variables
 $servername = "localhost";
@@ -42,9 +46,9 @@ if (!$conn) {
 }
 
 // Insert into mysql table
-    $sql = "INSERT INTO contactsdb.contact (Contact_FirstName, Contact_LastName, Contact_Position)
-    VALUES('$fname', '$lname', '$position')";
-	
+    $sql = "INSERT INTO contactsdb.contactphone (contact_idContact, ContactPhone_Number, ContactPhone_Mobile_yn)
+    VALUES('$contactID', '$phoneNumber', '$mobileFlag')";
+
 if (mysqli_query($conn, $sql)) {
     echo "New record created successfully";
 } else {
