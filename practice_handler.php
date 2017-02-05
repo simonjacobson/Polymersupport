@@ -5,28 +5,23 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 // Read the json Post contents
 $data = json_decode(file_get_contents('php://input'), true);
-//$data = my_urldecode(file_get_contents('php://input'), true);
-//parse_str(file_get_contents("php://input"), $data);
-//$data = json_decode($data, true);
 
 // Make sure there is data
 
 if ($data =="")  {
 	$errorNull= "No data received";
-	
-} else {	
+
+} else {
 
 // Convert json object to php associative array
 
 // Parse the contact details
-    $fname = $data['c_firstName'];
-    $lname = $data['c_lastName'];
-    $position = $data['c_Position'];
-	
+    $practiceName = $data['pr_name'];
+    $cohort = $data['pr_cohort'];
+
 // Validate fields by removing extra white spaces & escaping harmful characters
-$fname = trim($fname);
-$lname = trim($lname);
-$position = trim($position);
+$practiceName = trim($practiceName);
+$cohort = trim($cohort);
 
 // Create MySQL login variables
 $servername = "localhost";
@@ -42,9 +37,9 @@ if (!$conn) {
 }
 
 // Insert into mysql table
-    $sql = "INSERT INTO contactsdb.contact (Contact_FirstName, Contact_LastName, Contact_Position)
-    VALUES('$fname', '$lname', '$position')";
-	
+    $sql = "INSERT INTO contactsdb.amp_practice (AMP_Practice_Name, AMP_Practice_Cohort)
+    VALUES('$practiceName', '$cohort')";
+
 if (mysqli_query($conn, $sql)) {
     echo "New record created successfully";
 } else {
